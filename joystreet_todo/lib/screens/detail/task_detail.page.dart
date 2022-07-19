@@ -20,8 +20,31 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
         title: const Text('Detalhe da tarefa'),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.pop(context, null);
+            onPressed: () async {
+              var result = await showDialog<bool?>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text("Aviso"),
+                    content: const Text("Ao continuar, a tarefa será excluída"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, false);
+                        },
+                        child: const Text('CANCELAR'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+              if (result != null && result) Navigator.pop(context, null);
             },
             icon: const Icon(Icons.remove_circle_outline),
           ),
