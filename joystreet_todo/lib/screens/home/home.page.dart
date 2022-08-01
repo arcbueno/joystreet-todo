@@ -188,11 +188,6 @@ class _HomePageState extends State<HomePage> {
           );
         }),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {},
-        tooltip: 'New',
-        child: const Icon(Icons.add),
-      ),
     );
   }
 
