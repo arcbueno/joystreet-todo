@@ -17,7 +17,13 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
         TextEditingController(text: widget.item.descricao);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalhe da tarefa'),
+        title: Hero(
+          tag: 'tag-${widget.item.descricao}',
+          child: Text(
+            widget.item.descricao,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: () async {

@@ -25,14 +25,53 @@ class _HomePageState extends State<HomePage> {
         child: Builder(builder: (context) {
           return Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Bem Vindo! Toque no botão abaixo para criar uma nova tarefa',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Colors.black.withOpacity(.7),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  border: Border.all(width: 3),
+                  borderRadius: const BorderRadius.horizontal(
+                      left: Radius.circular(32), right: Radius.zero),
+                ),
+                padding: const EdgeInsets.all(16.0),
+                margin: const EdgeInsets.all(8),
+                child: RichText(
+                  text: const TextSpan(children: [
+                    TextSpan(
+                      text: 'Bem Vindo(a)! ',
+                      style: TextStyle(
+                        fontSize: 34,
+                        color: Colors.yellow,
+                        fontStyle: FontStyle.italic,
+                        fontFamily: '.SF UI Display',
                       ),
-                  textAlign: TextAlign.center,
+                    ),
+                    TextSpan(
+                      text: 'Esta é minha lista de tarefas. ',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'Clique em ',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'adicionar ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 34,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'para criar uma nova tarefa',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ]),
                 ),
               ),
               if (taskList.isEmpty)
@@ -49,6 +88,7 @@ class _HomePageState extends State<HomePage> {
                       const Icon(
                         Icons.android,
                         size: 128,
+                        semanticLabel: 'Icone do android',
                       ),
                     ],
                   ),
@@ -61,21 +101,32 @@ class _HomePageState extends State<HomePage> {
                     var item = taskList[index];
                     if (item.concluido) {
                       return InkWell(
+                        splashColor: Colors.amberAccent,
                         onTap: () async {
                           await _onItemTouch(item);
                         },
-                        child: ListTile(
-                          title: Text(item.descricao),
-                          tileColor: Colors.grey,
+                        child: Hero(
+                          tag: 'tag-${item.descricao}',
+                          child: ListTile(
+                            title: Text(item.descricao),
+                            tileColor: Colors.grey,
+                          ),
                         ),
                       );
                     }
                     return InkWell(
+                      splashColor: Colors.amberAccent,
                       onTap: () async {
                         await _onItemTouch(item);
                       },
                       child: ListTile(
-                        title: Text(item.descricao),
+                        title: Hero(
+                          tag: 'tag-${item.descricao}',
+                          child: Text(
+                            item.descricao,
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                        ),
                       ),
                     );
                   },
@@ -83,21 +134,62 @@ class _HomePageState extends State<HomePage> {
                     return const Divider();
                   },
                 ),
+              InkWell(
+                splashColor: Colors.yellowAccent,
+                onTap: () async {
+                  var novaTarefa = await Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return ScaleTransition(
+                          alignment: Alignment.center,
+                          scale: Tween<double>(begin: 0.1, end: 1).animate(
+                            CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.bounceIn,
+                            ),
+                          ),
+                          child: child,
+                        );
+                      },
+                      transitionDuration: const Duration(seconds: 2),
+                      pageBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation) {
+                        return const NewTaskPage();
+                      },
+                    ),
+                  );
+                  setState(() {
+                    taskList.add(novaTarefa);
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                    gradient: const LinearGradient(
+                      colors: [Colors.grey, Colors.amberAccent],
+                    ),
+                  ),
+                  child: Text(
+                    'ADICIONAR',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ),
+              ),
             ],
           );
         }),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var novaTarefa = await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: ((context) => const NewTaskPage()),
-            ),
-          );
-          setState(() {
-            taskList.add(novaTarefa);
-          });
-        },
+        onPressed: () async {},
         tooltip: 'New',
         child: const Icon(Icons.add),
       ),
