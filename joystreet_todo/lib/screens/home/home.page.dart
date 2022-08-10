@@ -94,45 +94,52 @@ class _HomePageState extends State<HomePage> {
                   ),
                 )
               else
-                ListView.separated(
-                  itemCount: taskList.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    var item = taskList[index];
-                    if (item.concluido) {
-                      return InkWell(
-                        splashColor: Colors.amberAccent,
-                        onTap: () async {
-                          await _onItemTouch(item);
-                        },
-                        child: Hero(
-                          tag: 'tag-${item.descricao}',
+                Semantics(
+                  label: 'Lista de tarefas',
+                  child: AspectRatio(
+                    aspectRatio: 9 / 11,
+                    child: ListView.separated(
+                      itemCount: taskList.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        var item = taskList[index];
+                        if (item.concluido) {
+                          return InkWell(
+                            splashColor: Colors.amberAccent,
+                            onTap: () async {
+                              await _onItemTouch(item);
+                            },
+                            child: Hero(
+                              tag: 'tag-${item.descricao}',
+                              child: ListTile(
+                                title: Text(item.descricao),
+                                tileColor: Colors.grey,
+                              ),
+                            ),
+                          );
+                        }
+                        return InkWell(
+                          splashColor: Colors.amberAccent,
+                          onTap: () async {
+                            await _onItemTouch(item);
+                          },
                           child: ListTile(
-                            title: Text(item.descricao),
-                            tileColor: Colors.grey,
+                            title: Hero(
+                              tag: 'tag-${item.descricao}',
+                              child: Text(
+                                item.descricao,
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                              ),
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                    return InkWell(
-                      splashColor: Colors.amberAccent,
-                      onTap: () async {
-                        await _onItemTouch(item);
+                        );
                       },
-                      child: ListTile(
-                        title: Hero(
-                          tag: 'tag-${item.descricao}',
-                          child: Text(
-                            item.descricao,
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Divider();
-                  },
+                      separatorBuilder: (context, index) {
+                        return const Divider();
+                      },
+                    ),
+                  ),
                 ),
               InkWell(
                 splashColor: Colors.yellowAccent,
@@ -161,6 +168,9 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   );
+                  if (novaTarefa == null) {
+                    return;
+                  }
                   setState(() {
                     taskList.add(novaTarefa);
                   });

@@ -21,21 +21,29 @@ class NewTaskPage extends StatelessWidget {
         label: const Text('Salvar'),
         icon: const Icon(Icons.save),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextFormField(
-              controller: _controladorDescricao,
-              decoration: InputDecoration(
-                hintText: 'Botar a comida do cachorro...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+      body: Center(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Semantics(
+                  label: 'Input de descrição de tarefa',
+                  child: TextFormField(
+                    controller: _controladorDescricao,
+                    decoration: InputDecoration(
+                      hintText: 'Botar a comida do cachorro...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

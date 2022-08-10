@@ -70,36 +70,46 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: TextFormField(
-                onChanged: (String? val) {
-                  if (val == null) {
-                    widget.item.descricao = "";
-                    return;
-                  }
-                  widget.item.descricao = val;
-                },
-                controller: _controladorDescricao,
-                decoration: InputDecoration(
-                  hintText: 'Botar a comida do cachorro...',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+            Semantics(
+              label: 'Input de descrição de tarefa',
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height / 10,
+                child: AspectRatio(
+                  aspectRatio: 3 / 1,
+                  child: TextFormField(
+                    onChanged: (String? val) {
+                      if (val == null) {
+                        widget.item.descricao = "";
+                        return;
+                      }
+                      widget.item.descricao = val;
+                    },
+                    controller: _controladorDescricao,
+                    decoration: InputDecoration(
+                      hintText: 'Botar a comida do cachorro...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-            Checkbox(
-              value: widget.item.concluido,
-              onChanged: (bool? val) {
-                if (val == null) {
-                  return;
-                }
-                setState(
-                  () {
-                    widget.item.concluido = val;
-                  },
-                );
-              },
+            Semantics(
+              label: 'Checkbox concluído',
+              child: Checkbox(
+                value: widget.item.concluido,
+                onChanged: (bool? val) {
+                  if (val == null) {
+                    return;
+                  }
+                  setState(
+                    () {
+                      widget.item.concluido = val;
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
